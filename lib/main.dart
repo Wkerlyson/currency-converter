@@ -33,21 +33,33 @@ class _HomeState extends State<Home> {
   double euro;
 
   void _realChanged(String text) {
+    if (text.isEmpty) _clearAll();
+
     double real = double.parse(text);
     dolarController.text = (real / this.dolar).toStringAsPrecision(4);
     euroController.text = (real / this.euro).toStringAsPrecision(4);
   }
 
   void _dolarChanged(String text) {
+    if (text.isEmpty) _clearAll();
+
     double dolar = double.parse(text);
     realController.text = (dolar * this.dolar).toStringAsPrecision(4);
     euroController.text = (dolar * this.dolar / euro).toStringAsPrecision(4);
   }
 
   void _euroChanged(String text) {
+    if (text.isEmpty) _clearAll();
+
     double euro = double.parse(text);
     realController.text = (euro * this.euro).toStringAsPrecision(4);
     dolarController.text = (euro * this.euro / dolar).toStringAsPrecision(4);
+  }
+
+  void _clearAll() {
+    realController.text = "";
+    dolarController.text = "";
+    euroController.text = "";
   }
 
   @override
@@ -57,6 +69,12 @@ class _HomeState extends State<Home> {
         title: Text('\$ Converter \$'),
         centerTitle: true,
         backgroundColor: Colors.amber,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: _clearAll,
+          )
+        ],
       ),
       body: FutureBuilder<Map>(
         future: getData(),
